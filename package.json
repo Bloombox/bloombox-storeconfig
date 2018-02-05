@@ -1,11 +1,11 @@
 {
-  "name": "bloombox-tv",
+  "name": "bloombox-storeconfig",
   "version": "0.0.9",
-  "description": "Displays menus on TVs",
+  "description": "Storefront configuration elements.",
   "main": "index.html",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bloombox/bloombox-tv.git"
+    "url": "https://github.com/bloombox/bloombox-storeconfig.git"
   },
   "keywords": [
     "polymer",
@@ -16,7 +16,7 @@
   "license": "Private, all rights reserved",
   "private": true,
   "bugs": {
-    "url": "https://github.com/bloombox/bloombox-tv/issues"
+    "url": "https://github.com/bloombox/bloombox-storeconfig/issues"
   },
   "homepage": "https://github.com/bloombox/bloombox-tv",
   "dependencies": {

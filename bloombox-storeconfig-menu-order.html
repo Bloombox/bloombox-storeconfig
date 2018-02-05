@@ -1,0 +1,51 @@
+<!-- 
+`bloombox-storeconfig-list` Displays Bloombox menus on TVs.
+ 
+@customElement
+@polymer
+@demo demo/index.html
+-->
+<link rel="import" href="../polymer/polymer.html">
+<dom-module id="bloombox-storeconfig-menu-order">
+  <template>
+    <style>
+
+    :host div {
+      flex: 0 0 auto;
+      background: var(--bloombox-green-primary);
+      color: white;
+      border-radius: 8px;
+      padding: 0.2em 0.5em;
+      margin: 0 10px;
+      text-transform: capitalize;
+    }
+    :host div iron-icon {
+      color: white;
+      fill: white;
+    }
+    </style>
+
+    <div draggable="true"><iron-icon icon="editor:drag-handle"></iron-icon> [[category]], [[index]]</div>
+     
+    </template>
+
+  <script>
+  Polymer.BloomboxStoreconfigMenuOrder = Polymer({
+      is: 'bloombox-storeconfig-menu-order',
+      properties: {
+        category: String,
+        index: Number
+      },
+
+      ready: function() {
+        this.addEventListener('dragend', function(event) {
+          this.dispatchEvent(new CustomEvent('moveMenuOrder', {detail: { index: this.index}}));
+        }.bind(this));
+
+        this.addEventListener('dragover', function(event){
+          this.dispatchEvent(new CustomEvent('setMenuDragOver', {detail: {index: this.index}}));
+        }.bind(this));
+      }
+  });
+  </script>
+</dom-module>

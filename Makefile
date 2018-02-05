@@ -1,6 +1,6 @@
 
 #
-# - Bloombox - bloombox-tv
+# - Bloombox - bloombox-storeconfig
 #
 
 BUILDBOT ?= 0
@@ -10,7 +10,7 @@ CREDENTIALS ?= 1
 VERSION ?= 0.0.9
 
 all: build
-	@echo "bloombox-tv is ready."
+	@echo "bloombox-storeconfig is ready."
 
 
 #
@@ -24,10 +24,10 @@ build: $(TARGET) $(ENV) dependencies
 
 ifeq ($(BUILDBOT),yes)
 test:
-	wct --job-name "bloombox-tv" --expanded --build-number "$(BUILD_NUMBER)" --sauce-tunnel-id "$(SAUCE_TUNNEL)" --plugin wct-jenkins
+	wct --job-name "bloombox-storeconfig" --expanded --build-number "$(BUILD_NUMBER)" --sauce-tunnel-id "$(SAUCE_TUNNEL)" --plugin wct-jenkins
 else
 test:
-	@wct --job-name "bloombox-tv"
+	@wct --job-name "bloombox-storeconfig"
 endif
 
 quickbuild:
