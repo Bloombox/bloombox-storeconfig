@@ -1,0 +1,72 @@
+<!-- 
+`bloombox-storeconfig-list` Displays Bloombox menus on TVs.
+ 
+@customElement
+@polymer
+@demo demo/index.html
+-->
+<link rel="import" href="../polymer/polymer.html">
+<dom-module id="bloombox-storeconfig-list-item">
+  <template>
+    <style>
+
+    :host {
+      display: flex;
+    }
+
+    :host div:nth-of-type(1) {
+      width: 40%;
+    }
+
+    :host div:nth-of-type(2) {
+      width: 35%;
+    }
+    :host div:nth-of-type(3) {
+      width: 15%;
+    }
+    :host div:nth-of-type(4) {
+      width: 10%;
+    }
+
+    :host div {
+      margin-right: 1.5%;
+    }
+
+    input {
+      max-width: 80%;
+    }
+
+    </style>
+     <div>[[item.name]]</div>
+      <template is="dom-if" if="[[isPromo]]">
+        <div><input value="[[item.discount]]" type="text"></div>
+        <div><paper-toggle-button checked="[[item.enabled]]"></paper-toggle-button></div>
+      </template>
+
+      <template is="dom-if" if="[[!isPromo]]">
+       
+        <div><input value="[[item.deliveryMinimum]]" type="text"></div>
+        <div><paper-toggle-button checked="[[item.enabled]]"></paper-toggle-button></div>
+      </template>
+
+       <div><iron-icon icon="delete-forever" on-tap="_delete"></iron-icon></div>
+    </template>
+
+  <script>
+  Polymer.BloomboxStoreconfigListItem = Polymer({
+      is: 'bloombox-storeconfig-list-item',
+      properties: {
+        listItems: {
+          type: Array,
+          computed: "_computeItems(items)"
+        },
+        type: String
+      },
+
+      _delete: function() {
+        this.dispatchEvent(new CustomEvent('deleteListItem', {detail: {name: this.item.name, isPromo: this.isPromo}}));
+      }
+
+  });
+  </script>
+</dom-module>

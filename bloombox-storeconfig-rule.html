@@ -1,0 +1,158 @@
+<!-- 
+`bloombox-storeconfig-rule` Displays Bloombox menus on TVs.
+ 
+@customElement
+@polymer
+@demo demo/index.html
+-->
+<link rel="import" href="../polymer/polymer.html">
+<dom-module id="bloombox-storeconfig-rule">
+  <template>
+    <style>
+      :host .inner-wrap {
+        box-sizing: border-box;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex: 0 0 100%;
+        background: white;
+        margin-bottom: 1em;
+        padding: 0 1em;
+      }
+      
+      :host .inner-wrap > div:first-of-type {
+        flex: 0 0 3%;
+      }
+
+
+      :host .inner-wrap > div:last-of-type {
+        display: flex;
+        justify-content: space-between;
+        flex: 0 0 3%;
+      }
+
+      :host .inner-wrap > div {
+        flex: 0 0 22.5%;
+      }
+
+      :host paper-dropdown-menu {
+        position: relative;
+        top: -10px;
+      }
+
+      :host iron-icon {
+        cursor: pointer;
+        margin-top: 18px
+      }
+    </style>
+
+        <div class="inner-wrap">
+          <div>
+          <iron-icon icon="editor:drag-handle" class="dragHandle"></iron-icon>
+        </div>
+
+        <div>
+           <paper-dropdown-menu>
+              <paper-listbox class="dropdown-content" selected="{{hours.mode}}" attr-for-selected="picked">
+                <paper-item picked="OPEN">Open</paper-item>
+                <paper-item picked="CLOSED">Closed</paper-item>
+                <paper-item picked="DELIVERY_ONLY">Delivery Only</paper-item>
+                <paper-item picked="PICKUP_ONLY">Pickup Only</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+        </div>
+
+        <div>
+           <paper-dropdown-menu>
+              <paper-listbox class="dropdown-content" selected="{{hours.bounds.span}}" attr-for-selected="picked">
+                <paper-item picked="EVERYDAY">Every Day</paper-item>
+                <paper-item picked="WEEKEND">Weekend</paper-item>
+                <paper-item picked="MONDAY">Monday</paper-item>
+                <paper-item picked="TUESDAY">Tuesday</paper-item>
+                <paper-item picked="WEDNESDAY">Wednesday</paper-item>
+                <paper-item picked="THURSDAY">Thursday</paper-item>
+                <paper-item picked="FRIDAY">Friday</paper-item>
+                <paper-item picked="SATURDAY">Saturday</paper-item>
+                <paper-item picked="SUNDAY">Sunday</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+        </div>
+
+        <div>
+          <paper-input id="begin" always-float-label label="Begin" value="{{hours.bounds.begin.hour}}:00"></paper-input>
+        </div>
+
+        <div>
+          <paper-input id="end" always-float-label label="End" value="{{hours.bounds.end.hour}}:00"></paper-input>
+        </div>
+
+        <div>
+          <paper-toggle-button></paper-toggle-button>
+          <iron-icon class="delete" icon="delete-forever" on-tap="_delete"></iron-icon>
+        </div>
+        </div>
+    </template>
+
+  <script>
+  Polymer.BloomboxStoreconfigRule = Polymer({
+      is: 'bloombox-storeconfig-rule',
+      properties: {
+        hours: {
+          type: Object,
+          notify: true,
+          value: function() {
+            return {
+              enabled: false,
+              bounds: {
+                begin: {
+                  hour: 9
+                },
+                end: {
+                  hour: 17
+                },
+                span: "EVERYDAY"
+              },
+              mode: "DELIVERY_ONLY"
+            }
+          }
+        },
+      },
+
+      attached: function() {
+        console.log(this.querySelectorAll('paper-dropdown-menu'));
+      },
+
+      ready: function() {
+        let opt1 = {
+          enableTime: true,
+          noCalendar: true,
+          dateFormat: "H:i",
+          time_24hr: false,
+          defaultHour: this.hours.bounds.begin.hour,
+        };
+
+        let opt2 = {
+          enableTime: true,
+          noCalendar: true,
+          dateFormat: "H:i",
+          time_24hr: false,
+          defaultHour: this.hours.bounds.begin.hour2
+        };
+
+        flatpickr(this.$.begin, opt1);
+        flatpickr(this.$.end, opt2);
+
+        this.addEventListener('dragend', function(event) {
+          this.dispatchEvent(new CustomEvent('moveHourItem', {detail: {item: this, index: this.index}}));
+        }.bind(this));
+
+        this.addEventListener('dragover', function(event){
+          this.dispatchEvent(new CustomEvent('setRuleDragOver', {detail: {item: this}}));
+        }.bind(this));
+      },
+
+      _delete: function(e) {
+        this.dispatchEvent(new CustomEvent('delete', {detail: {item: this}}));
+      }
+  });
+  </script>
+</dom-module>

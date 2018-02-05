@@ -1,0 +1,130 @@
+<!-- 
+`bloombox-storeconfig-list` Displays Bloombox menus on TVs.
+ 
+@customElement
+@polymer
+@demo demo/index.html
+-->
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="bloombox-storeconfig-list-item.html">
+<dom-module id="bloombox-storeconfig-list">
+  <template>
+    <style>
+    .container  {
+          max-height: 500px;
+    overflow: scroll;
+    }
+    paper-button {
+      background: var(--app-primary-color);
+      color: white;
+      text-transform: initial;
+      margin-top: 0.5em;
+    }
+    .btns {
+      display: flex;
+      border-top: 1px solid #eee;
+    }
+    .btns paper-input {
+      width: 29%;
+      margin-right: 3%;
+    }
+
+    .btns paper-button {
+      margin-left: auto
+    }
+    </style>
+      <div class="container">
+        <iron-list items="{{listItems}}" as="[[item]]" id="list">
+          <template>
+            <bloombox-storeconfig-list-item type="[[type]]" item="[[item]]" is-promo="[[isPromo]]"></bloombox-storeconfig-list-item>
+          </template>
+        </iron-list>
+      </div>
+      <div class="btns">
+        <template is="dom-if" if="[[isPromo]]">
+          <paper-input label="Promo Name" value="{{promoName}}"></paper-input>
+          <paper-input label="Discount Percentage" value="{{discount}}"></paper-input>
+          <paper-button on-tap="_add"><iron-icon icon="add"></iron-icon>[[button]]</paper-button>
+        </template>
+        <template is="dom-if" if="[[!isPromo]]">
+          <paper-input label="Zipcode" value="{{zipcode}}"></paper-input>
+          <paper-input label="Minimum" value="{{dMin}}"></paper-input>
+          <paper-button on-tap="_add"><iron-icon icon="add"></iron-icon>[[button]]</paper-button>
+        </template>
+      </div>
+
+    </template>
+
+  <script>
+  Polymer.BloomboxStoreconfigList = Polymer({
+      is: 'bloombox-storeconfig-list',
+      properties: {
+        items: {
+          type: Object,
+          notify: true
+        },
+        listItems: {
+          type: Array,
+          computed: "_computeItems(items)",
+          notify: true
+        },
+        isPromo: {
+          type: Boolean,
+          computed: "_isPromo(type)"
+        },
+        promoName: String,
+        discount: String,
+        zipcode: String,
+        dMin: String
+      },
+
+      _isPromo: function(type) {
+        return type === "promo";
+      },
+
+      _add: function(e) {
+        let self = this;
+        if(this.isPromo) {
+          this.dispatchEvent(
+            new CustomEvent('addNewListItem', {
+              detail: {
+                type: self.type,
+                item: {
+                  "name": e.model.__data__.promoName,
+                  "discount": e.model.__data__.discount,
+                  "enabled": true
+                }
+              }
+            }
+          ));
+        } else {
+          this.dispatchEvent(
+            new CustomEvent('addNewListItem', {
+              detail: {
+                type: self.type,
+                item: {
+                  "name": e.model.__data__.zipcode,
+                  "deliveryMinimum": this.dMin,
+                  "enabled": true
+                }
+              }
+            }
+          ));
+        }
+      },
+
+      _computeItems: function(items) {
+       if(items) {
+          let arr = [];
+
+          
+          for(let item in items) {
+            items[item].name = item;
+            arr.push(items[item]);
+          }
+          return arr;
+         }
+      }
+  });
+  </script>
+</dom-module>

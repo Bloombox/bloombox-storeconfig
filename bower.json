@@ -1,0 +1,9 @@
+{
+  "name": "bloombox-storeconfig",
+  "version": "0.0.9",
+  "description": "Store configurator.",
+  "main": "bloombox-storeconfig.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  }
+}
