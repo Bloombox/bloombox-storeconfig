@@ -22,7 +22,7 @@
     }
     .btns {
       display: flex;
-      border-top: 1px solid #eee;
+      margin-top: 20px;
     }
     .btns paper-input {
       width: 29%;
@@ -34,11 +34,9 @@
     }
     </style>
       <div class="container">
-        <iron-list items="{{listItems}}" as="[[item]]" id="list">
-          <template>
+        <template is="dom-repeat" items="{{listItems}}" as="[[item]]" id="list">
             <bloombox-storeconfig-list-item type="[[type]]" item="[[item]]" is-promo="[[isPromo]]"></bloombox-storeconfig-list-item>
-          </template>
-        </iron-list>
+        </template>
       </div>
       <div class="btns">
         <template is="dom-if" if="[[isPromo]]">
@@ -84,7 +82,7 @@
 
       _add: function(e) {
         let self = this;
-        if(this.isPromo) {
+        if(this.isPromo && e.model.__data__.promoName !== "" && e.model.__data__.discount !== "" && e.model.__data__.promoName != null && e.model.__data__.discount != null) {
           this.dispatchEvent(
             new CustomEvent('addNewListItem', {
               detail: {
@@ -98,18 +96,20 @@
             }
           ));
         } else {
-          this.dispatchEvent(
-            new CustomEvent('addNewListItem', {
-              detail: {
-                type: self.type,
-                item: {
-                  "name": e.model.__data__.zipcode,
-                  "deliveryMinimum": this.dMin,
-                  "enabled": true
+          if(e.model.__data__.zipcode !== "" && e.model.__data__.dMin !== "" && e.model.__data__.zipcode != null && e.model.__data__.dMin != null) {
+            this.dispatchEvent(
+              new CustomEvent('addNewListItem', {
+                detail: {
+                  type: self.type,
+                  item: {
+                    "name": e.model.__data__.zipcode,
+                    "deliveryMinimum": this.dMin,
+                    "enabled": true
+                  }
                 }
               }
-            }
-          ));
+            ));
+          }
         }
       },
 
