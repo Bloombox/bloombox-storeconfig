@@ -9,6 +9,11 @@
 <dom-module id="bloombox-storeconfig-rule">
   <template>
     <style>
+
+      :host { 
+        width: 100%;
+      }
+
       :host .inner-wrap {
         box-sizing: border-box;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -22,7 +27,6 @@
       :host .inner-wrap > div:first-of-type {
         flex: 0 0 3%;
       }
-
 
       :host .inner-wrap > div:last-of-type {
         display: flex;
@@ -118,7 +122,7 @@
       },
 
       attached: function() {
-        console.log(this.querySelectorAll('paper-dropdown-menu'));
+        
       },
 
       ready: function() {
@@ -146,7 +150,7 @@
         }.bind(this));
 
         this.addEventListener('dragover', function(event){
-          this.dispatchEvent(new CustomEvent('setRuleDragOver', {detail: {item: this}}));
+          this.dispatchEvent(new CustomEvent('setRuleDragOver', {detail: {index: this.index}}));
         }.bind(this));
       },
 
