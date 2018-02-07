@@ -1,16 +1,16 @@
 <!-- 
-`bloombox-storeconfig-rule` Displays Bloombox menus on TVs.
+`bloombox-storeconfig-special` Displays Bloombox menus on TVs.
  
 @customElement
 @polymer
 @demo demo/index.html
 -->
 <link rel="import" href="../polymer/polymer.html">
-<dom-module id="bloombox-storeconfig-rule">
+<dom-module id="bloombox-storeconfig-special">
   <template>
     <style>
 
-      :root {
+     :root {
         --paper-input-container-underline: {
           display: none;
         };
@@ -74,27 +74,15 @@
           </div>
 
           <div>
+            <paper-input id="date" value="{{_formatDate(value)}}" label="Date"></paper-input>
+          </div>
+
+          <div>
              <paper-dropdown-menu>
                 <paper-listbox class="dropdown-content" selected="{{hours.mode}}" attr-for-selected="picked">
                   <paper-item picked="OPEN">Store</paper-item>
                   <paper-item picked="DELIVERY_ONLY">Delivery</paper-item>
                   <paper-item picked="PICKUP_ONLY">Pickup</paper-item>
-                </paper-listbox>
-              </paper-dropdown-menu>
-          </div>
-
-          <div>
-             <paper-dropdown-menu>
-                <paper-listbox class="dropdown-content" selected="{{hours.bounds.span}}" attr-for-selected="picked">
-                  <paper-item picked="EVERYDAY">Every Day</paper-item>
-                  <paper-item picked="WEEKEND">Weekend</paper-item>
-                  <paper-item picked="MONDAY">Monday</paper-item>
-                  <paper-item picked="TUESDAY">Tuesday</paper-item>
-                  <paper-item picked="WEDNESDAY">Wednesday</paper-item>
-                  <paper-item picked="THURSDAY">Thursday</paper-item>
-                  <paper-item picked="FRIDAY">Friday</paper-item>
-                  <paper-item picked="SATURDAY">Saturday</paper-item>
-                  <paper-item picked="SUNDAY">Sunday</paper-item>
                 </paper-listbox>
               </paper-dropdown-menu>
           </div>
@@ -115,8 +103,8 @@
     </template>
 
   <script>
-  Polymer.BloomboxStoreconfigRule = Polymer({
-      is: 'bloombox-storeconfig-rule',
+  Polymer.BloomboxStoreconfigSpecial = Polymer({
+      is: 'bloombox-storeconfig-special',
       properties: {
         hours: {
           type: Object,
@@ -139,11 +127,22 @@
         },
       },
 
+      _formatDate: function(date) {
+        if(date.length < 9)
+          return date.slice(0, 4) + "-" +  date.slice(4, 6) + "-" + date.slice(6, 8);
+        return date;
+      },
+
       attached: function() {
         
       },
 
       ready: function() {
+        
+        flatpickr(this.$.date, {
+          dateFormat: 'Y-m-d' 
+        });
+
         if(this.hours && this.hours.bounds && this.hours.bounds.begin && this.hours.bounds.end) {
           let opt1 = {
             enableTime: true,
