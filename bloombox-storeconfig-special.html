@@ -35,10 +35,6 @@
         margin-bottom: 1em;
         padding: 0 1em;
       }
-      
-      :host .inner-wrap > div:first-of-type {
-        flex: 0 0 5%;
-      }
 
       :host .inner-wrap > div:last-of-type {
         display: flex;
@@ -47,7 +43,7 @@
       }
 
       :host .inner-wrap > div {
-        flex: 0 0 21%;
+        flex: 0 0 22%;
       }
 
       :host paper-dropdown-menu {
@@ -69,9 +65,6 @@
     </style>
 
         <div class="inner-wrap">
-          <div>
-            <iron-icon icon="editor:drag-handle" class="dragHandle"></iron-icon>
-          </div>
 
           <div>
             <paper-input id="date" value="{{_formatDate(value)}}" label="Date"></paper-input>
@@ -144,6 +137,7 @@
         });
 
         if(this.hours && this.hours.bounds && this.hours.bounds.begin && this.hours.bounds.end) {
+
           let opt1 = {
             enableTime: true,
             noCalendar: true,
@@ -162,19 +156,11 @@
 
           flatpickr(this.$.begin, opt1);
           flatpickr(this.$.end, opt2);
-
-          this.addEventListener('dragend', function(event) {
-            this.dispatchEvent(new CustomEvent('moveHourItem', {detail: {item: this, index: this.index}}));
-          }.bind(this));
-
-          this.addEventListener('dragover', function(event){
-            this.dispatchEvent(new CustomEvent('setRuleDragOver', {detail: {index: this.index}}));
-          }.bind(this));
         }
       },
 
       _delete: function(e) {
-        this.dispatchEvent(new CustomEvent('delete', {detail: {item: this}}));
+        this.dispatchEvent(new CustomEvent('deleteSpecial', {detail: { date: this.value, index: this.indexChild }}));
       }
   });
   </script>
